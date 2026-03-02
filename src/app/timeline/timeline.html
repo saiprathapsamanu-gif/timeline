@@ -1,0 +1,35 @@
+<div class="page">
+  <h1 class="title">Work Orders</h1>
+
+  <div class="controls">
+    <label>Timescale</label>
+    <ng-select
+      [items]="['Month']"
+      [searchable]="false"
+      [clearable]="false"
+      [(ngModel)]="selectedZoom">
+    </ng-select>
+  </div>
+
+  <div class="timeline">
+    <div class="left-panel">
+      <div class="header">Work Center</div>
+
+      <div class="row" *ngFor="let wc of workCenters">
+        {{ wc }}
+      </div>
+    </div>
+
+    <div class="right-panel">
+      <div class="timeline-header">
+        <div class="month" *ngFor="let month of months">
+          {{ month }}
+        </div>
+      </div>
+
+      <div class="timeline-body">
+        <div class="row" *ngFor="let wc of workCenters"></div>
+      </div>
+    </div>
+  </div>
+</div>
