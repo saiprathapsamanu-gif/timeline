@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { NgFor } from '@angular/common';
+import { NgFor, NgStyle } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-timeline',
   standalone: true,
-  imports: [NgFor, FormsModule, NgSelectModule],
+  imports: [NgFor, NgStyle, FormsModule, NgSelectModule],
   templateUrl: './timeline.html',
   styleUrls: ['./timeline.scss'],
 })
@@ -31,4 +31,37 @@ export class TimelineComponent {
     'Feb 2025',
     'Mar 2025'
   ];
+
+  workOrders = [
+  {
+    workCenter: 'Extrusion Line A',
+    name: 'Genesis Hardware',
+    startMonthIndex: 1,
+    duration: 2
+  },
+  {
+    workCenter: 'CNC Machine 1',
+    name: 'Rodrigues Electrics',
+    startMonthIndex: 2,
+    duration: 2
+  },
+  {
+    workCenter: 'Assembly Station',
+    name: 'McMarrow Distribution',
+    startMonthIndex: 3,
+    duration: 3
+  }
+];
+
+getBarStyle(order: any, wc: string) {
+  if (order.workCenter !== wc) {
+    return { display: 'none' };
+  }
+
+  return {
+    left: `${order.startMonthIndex * 200}px`,
+    width: `${order.duration * 200}px`
+  };
+}
+
 }

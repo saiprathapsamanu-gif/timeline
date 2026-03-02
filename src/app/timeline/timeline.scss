@@ -57,7 +57,24 @@
   }
 }
 
+.timeline-body {
+  min-width: 1600px;  // 8 months × 200px
+}
+
 .timeline-body .row {
   height: 80px;
   border-top: 1px solid #f1f1f1;
+  position: relative;
+}
+
+.bar {
+  position: absolute;
+  top: 20px; // centers inside 80px row
+  height: 40px;
+  background: #e8f0fe;
+  border-radius: 8px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
 }

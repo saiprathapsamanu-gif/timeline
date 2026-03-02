@@ -28,8 +28,16 @@
       </div>
 
       <div class="timeline-body">
-        <div class="row" *ngFor="let wc of workCenters"></div>
-      </div>
+            <div class="row" *ngFor="let wc of workCenters">
+                <div
+                    class="bar"
+                    *ngFor="let order of workOrders"
+                    [ngStyle]="getBarStyle(order, wc)"
+                    >
+                    {{ order.name }}
+                </div>
+            </div>
+        </div>
     </div>
   </div>
 </div>
