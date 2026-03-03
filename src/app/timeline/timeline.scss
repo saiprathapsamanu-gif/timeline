@@ -65,6 +65,7 @@
   height: 80px;
   border-top: 1px solid #f1f1f1;
   position: relative;
+  overflow: visible;   // VERY IMPORTANT
 }
 
 .bar {
@@ -78,6 +79,11 @@
   justify-content: space-between;
   font-size: 14px;
   gap: 12px;
+  transition: all 0.2s ease;
+}
+
+.bar:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
 .bar.complete {
@@ -101,4 +107,50 @@
   border-radius: 12px;
   font-size: 12px;
   text-transform: capitalize;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;   // VERY IMPORTANT
+}
+
+.more-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.more-btn:hover {
+  background: rgba(0,0,0,0.08);
+}
+
+.action-menu {
+  position: absolute;
+  right: 0;
+  top: 30px;   // instead of 45px
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  width: 120px;
+  z-index: 100;
+}
+
+.menu-item {
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: #f3f4f6;
+}
+
+.menu-item.delete {
+  color: #d93025;
 }

@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { NgFor, NgStyle, NgClass } from '@angular/common';
+import { NgFor, NgStyle, NgClass, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-timeline',
   standalone: true,
-  imports: [NgFor, NgStyle, NgClass, FormsModule, NgSelectModule],
+  imports: [NgFor, NgStyle, NgClass, NgIf, FormsModule, NgSelectModule],
   templateUrl: './timeline.html',
   styleUrls: ['./timeline.scss'],
 })
@@ -55,6 +55,17 @@ export class TimelineComponent {
     status: 'blocked'
   }
 ];
+
+activeMenuId: string | null = null;
+
+toggleMenu(orderName: string) {
+  this.activeMenuId =
+    this.activeMenuId === orderName ? null : orderName;
+}
+
+closeMenu() {
+  this.activeMenuId = null;
+}
 
 getBarStyle(order: any, wc: string) {
   if (order.workCenter !== wc) {

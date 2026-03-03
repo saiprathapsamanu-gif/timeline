@@ -35,8 +35,17 @@
                     [ngStyle]="getBarStyle(order, wc)"
                     [ngClass]="order.status">
                     <span class="name">{{ order.name }}</span>
-                    <span class="status-pill">{{ order.status }}</span>
+                    <div class="actions">
+                        <span class="status-pill">{{ order.status }}</span>
+                        <button class="more-btn" (click)="toggleMenu(order.name); $event.stopPropagation()">⋯</button>
+                        <div
+                            class="action-menu"
+                            *ngIf="activeMenuId === order.name">
+                            <div class="menu-item">Edit</div>
+                                <div class="menu-item delete">Delete</div>
+                        </div>
                     </div>
+                </div>
             </div>
         </div>
     </div>
