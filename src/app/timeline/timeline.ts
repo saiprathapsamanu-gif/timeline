@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { NgFor, NgStyle } from '@angular/common';
+import { NgFor, NgStyle, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-timeline',
   standalone: true,
-  imports: [NgFor, NgStyle, FormsModule, NgSelectModule],
+  imports: [NgFor, NgStyle, NgClass, FormsModule, NgSelectModule],
   templateUrl: './timeline.html',
   styleUrls: ['./timeline.scss'],
 })
@@ -37,19 +37,22 @@ export class TimelineComponent {
     workCenter: 'Extrusion Line A',
     name: 'Genesis Hardware',
     startMonthIndex: 1,
-    duration: 2
+    duration: 2,
+    status: 'complete'
   },
   {
     workCenter: 'CNC Machine 1',
     name: 'Rodrigues Electrics',
     startMonthIndex: 2,
-    duration: 2
+    duration: 2,
+    status: 'in-progress'
   },
   {
     workCenter: 'Assembly Station',
     name: 'McMarrow Distribution',
     startMonthIndex: 3,
-    duration: 3
+    duration: 3,
+    status: 'blocked'
   }
 ];
 

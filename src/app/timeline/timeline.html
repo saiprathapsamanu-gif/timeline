@@ -33,9 +33,10 @@
                     class="bar"
                     *ngFor="let order of workOrders"
                     [ngStyle]="getBarStyle(order, wc)"
-                    >
-                    {{ order.name }}
-                </div>
+                    [ngClass]="order.status">
+                    <span class="name">{{ order.name }}</span>
+                    <span class="status-pill">{{ order.status }}</span>
+                    </div>
             </div>
         </div>
     </div>

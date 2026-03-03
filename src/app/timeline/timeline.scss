@@ -69,12 +69,36 @@
 
 .bar {
   position: absolute;
-  top: 20px; // centers inside 80px row
+  top: 20px;
   height: 40px;
-  background: #e8f0fe;
   border-radius: 8px;
-  padding: 0 16px;
+  padding: 0 12px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   font-size: 14px;
+  gap: 12px;
+}
+
+.bar.complete {
+  background: #e6f4ea;
+  color: #1e7e34;
+}
+
+.bar.in-progress {
+  background: #e8f0fe;
+  color: #1a73e8;
+}
+
+.bar.blocked {
+  background: #fdecea;
+  color: #d93025;
+}
+
+.status-pill {
+  background: rgba(0,0,0,0.08);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  text-transform: capitalize;
 }
