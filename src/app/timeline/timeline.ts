@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NgFor, NgStyle, NgClass, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-timeline',
@@ -10,6 +11,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
   templateUrl: './timeline.html',
   styleUrls: ['./timeline.scss'],
 })
+
 export class TimelineComponent {
   selectedZoom = 'Month';
 
@@ -63,8 +65,29 @@ toggleMenu(orderName: string) {
     this.activeMenuId === orderName ? null : orderName;
 }
 
-closeMenu() {
+@HostListener('document:click')
+handleClickOutside() {
   this.activeMenuId = null;
+}
+
+statusOptions = [
+  { label: 'Complete', value: 'complete' },
+  { label: 'In-Progress', value: 'in-progress' },
+  { label: 'Blocked', value: 'blocked' }
+];
+
+isPanelOpen = false;
+selectedOrder: any = null;
+
+openEditPanel(order: any) {
+  this.selectedOrder = order;
+  this.isPanelOpen = true;
+  this.activeMenuId = null;
+}
+
+closePanel() {
+  this.isPanelOpen = false;
+  this.selectedOrder = null;
 }
 
 getBarStyle(order: any, wc: string) {

@@ -14,7 +14,6 @@
   <div class="timeline">
     <div class="left-panel">
       <div class="header">Work Center</div>
-
       <div class="row" *ngFor="let wc of workCenters">
         {{ wc }}
       </div>
@@ -41,8 +40,8 @@
                         <div
                             class="action-menu"
                             *ngIf="activeMenuId === order.name">
-                            <div class="menu-item">Edit</div>
-                                <div class="menu-item delete">Delete</div>
+                            <div class="menu-item" (click)="openEditPanel(order); $event.stopPropagation()">Edit</div>
+                            <div class="menu-item delete">Delete</div>
                         </div>
                     </div>
                 </div>
@@ -50,4 +49,47 @@
         </div>
     </div>
   </div>
+  <!-- Overlay -->
+    <div class="overlay" *ngIf="isPanelOpen" (click)="closePanel()"></div>
+
+    <div class="side-panel" *ngIf="isPanelOpen">
+  
+        <div class="panel-inner">
+
+            <div class="panel-header">
+            <h2>Edit Work Order</h2>
+            <button class="close-btn" (click)="closePanel()">✕</button>
+            </div>
+
+            <div class="panel-body">
+
+                <div class="field-group">
+                    <label>Work Order Name</label>
+                    <input type="text" [(ngModel)]="selectedOrder.name" />
+                </div>
+
+                <div class="field-group">
+                    <label>Status</label>
+                    <ng-select
+                    [items]="statusOptions"
+                    bindLabel="label"
+                    bindValue="value"
+                    [(ngModel)]="selectedOrder.status"
+                    [searchable]="false"
+                    [clearable]="false">
+                    </ng-select>
+                </div>
+
+                <div class="field-group">
+                    <label>Start Month</label>
+                    <input type="text" />
+                </div>
+
+                <div class="field-group">
+                    <label>Duration</label>
+                    <input type="number" />
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
