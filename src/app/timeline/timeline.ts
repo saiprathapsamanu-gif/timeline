@@ -16,7 +16,7 @@ import { DatePipe } from '@angular/common';
 export class TimelineComponent {
   selectedZoom = 'Month';
 
-  timelineStart = new Date(2024, 7, 1); // Aug 1 2024
+  timelineStart = new Date('2024-08-01');
   monthWidth = 200;
 
   workCenters = [
@@ -42,22 +42,29 @@ export class TimelineComponent {
 {
   workCenter: 'Extrusion Line A',
   name: 'Genesis Hardware',
-  startDate: new Date(2024, 8, 1),   // Sep 2024
-  endDate: new Date(2024, 9, 31),    // Oct 2024
+  startDate: new Date('2024-09-10'),
+  endDate: new Date('2024-10-20'),
   status: 'complete'
 },
 {
   workCenter: 'CNC Machine 1',
+  name: 'Test Conflict Order',
+  startDate: new Date('2024-11-01'),
+  endDate: new Date('2024-12-20'),
+  status: 'in-progress'
+},
+{
+  workCenter: 'CNC Machine 1',
   name: 'Rodrigues Electrics',
-  startDate: new Date(2024, 9, 1),
-  endDate: new Date(2024, 10, 30),
+  startDate: new Date('2024-08-25'),
+  endDate: new Date('2024-10-05'),
   status: 'in-progress'
 },
 {
   workCenter: 'Assembly Station',
   name: 'McMarrow Distribution',
-  startDate: new Date(2024, 10, 1),
-  endDate: new Date(2025, 0, 31),
+  startDate: new Date('2024-11-05'),
+  endDate: new Date('2025-02-10'),
   status: 'blocked'
 }
 ];
@@ -127,17 +134,57 @@ getMonthIndex(date: Date) {
   return yearDiff * 12 + monthDiff;
 }
 
+saveOrder() {
+
+  if (this.detectConflict(this.selectedOrder)) {
+    alert('Schedule conflict detected for this work center');
+    return;
+  }
+
+  this.closePanel();
+
+}
+
+detectConflict(orderToCheck: any): boolean {
+
+  return this.workOrders.some(existing => {
+
+    if (existing === orderToCheck) return false;
+
+    if (existing.workCenter !== orderToCheck.workCenter) return false;
+
+    const newStart = orderToCheck.startDate;
+    const newEnd = orderToCheck.endDate;
+
+    const existingStart = existing.startDate;
+    const existingEnd = existing.endDate;
+
+    return newStart < existingEnd && newEnd > existingStart;
+  });
+
+}
+
 getBarStyle(order: any, wc: string) {
 
   if (order.workCenter !== wc) {
     return { display: 'none' };
   }
 
-  const startIndex = this.getMonthIndex(order.startDate);
-  const endIndex = this.getMonthIndex(order.endDate);
+  const start = new Date(order.startDate);
+  const end = new Date(order.endDate);
 
-  const left = startIndex * this.monthWidth;
-  const width = (endIndex - startIndex + 1) * this.monthWidth;
+  const msPerDay = 1000 * 60 * 60 * 24;
+
+  const daysFromStart =
+    (start.getTime() - this.timelineStart.getTime()) / msPerDay;
+
+  const durationDays =
+    (end.getTime() - start.getTime()) / msPerDay;
+
+  const pxPerDay = this.monthWidth / 30; // approximate
+
+  const left = daysFromStart * pxPerDay;
+  const width = durationDays * pxPerDay;
 
   return {
     left: `${left}px`,
