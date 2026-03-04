@@ -22,7 +22,7 @@
     <div class="right-panel">
       <div class="timeline-header">
         <div class="month" *ngFor="let month of months">
-          {{ month }}
+            {{ month.label }}
         </div>
       </div>
 
@@ -61,7 +61,7 @@
             <button class="close-btn" (click)="closePanel()">✕</button>
             </div>
 
-            <div class="panel-body">
+            <div class="panel-body" *ngIf="selectedOrder">
 
                 <div class="field-group">
                     <label>Work Order Name</label>
@@ -81,15 +81,24 @@
                 </div>
 
                 <div class="field-group">
-                    <label>Start Month</label>
-                    <input type="text" />
+                    <label>Start Date</label>
+                    <input
+                        type="date"
+                        [ngModel]="selectedOrder.startDate | date:'yyyy-MM-dd'"
+                        (ngModelChange)="onStartDateChange($event)"/>
                 </div>
 
                 <div class="field-group">
-                    <label>Duration</label>
-                    <input type="number" />
+                    <label>End Date</label>
+                    <input
+                        type="date"
+                        [ngModel]="selectedOrder.endDate | date:'yyyy-MM-dd'"
+                        (ngModelChange)="onEndDateChange($event)"/>
                 </div>
             </div>
+        </div>
+        <div class="panel-footer">
+            <button class="primary-btn" (click)="closePanel()">Save</button>
         </div>
     </div>
 </div>

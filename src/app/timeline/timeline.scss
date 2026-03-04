@@ -286,3 +286,16 @@
     0 1.5px 3px -1.5px rgba(200, 207, 233, 1),
     0 1px 0.5px -1px rgba(216, 220, 235, 1);
 }
+
+.panel-footer {
+  margin-top: auto;
+}
+
+.primary-btn {
+  background: #1a73e8;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
