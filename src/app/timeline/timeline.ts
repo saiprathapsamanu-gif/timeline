@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NgFor, NgStyle, NgClass, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { HostListener } from '@angular/core';
+import { HostListener, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -13,11 +13,27 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./timeline.scss'],
 })
 
-export class TimelineComponent {
+export class TimelineComponent implements OnInit {
   selectedZoom = 'Month';
 
   timelineStart = new Date('2024-08-01');
   monthWidth = 200;
+
+  ngOnInit(): void {
+
+  const saved = localStorage.getItem('workOrders');
+
+  if (saved) {
+    const parsed = JSON.parse(saved);
+
+    this.workOrders = parsed.map((o: any) => ({
+      ...o,
+      startDate: new Date(o.startDate),
+      endDate: new Date(o.endDate)
+    }));
+  }
+
+}
 
   workCenters = [
     'Extrusion Line A',
@@ -102,7 +118,10 @@ closePanel() {
 }
 
 onStartDateChange(value: string) {
-  const newDate = new Date(value);
+
+  const [year, month, day] = value.split('-').map(Number);
+
+  const newDate = new Date(year, month - 1, day);
 
   if (newDate > this.selectedOrder.endDate) {
     alert('Start date cannot be after end date');
@@ -110,10 +129,14 @@ onStartDateChange(value: string) {
   }
 
   this.selectedOrder.startDate = newDate;
+
 }
 
 onEndDateChange(value: string) {
-  const newDate = new Date(value);
+
+  const [year, month, day] = value.split('-').map(Number);
+
+  const newDate = new Date(year, month - 1, day);
 
   if (newDate < this.selectedOrder.startDate) {
     alert('End date cannot be before start date');
@@ -121,6 +144,7 @@ onEndDateChange(value: string) {
   }
 
   this.selectedOrder.endDate = newDate;
+
 }
 
 getMonthIndex(date: Date) {
@@ -141,8 +165,43 @@ saveOrder() {
     return;
   }
 
+  localStorage.setItem(
+    'workOrders',
+    JSON.stringify(this.workOrders)
+  );
+
   this.closePanel();
 
+}
+
+onTimelineClick(event: MouseEvent, workCenter: string) {
+
+  const timelineRect =
+    (event.currentTarget as HTMLElement).getBoundingClientRect();
+
+  const clickX = event.clientX - timelineRect.left;
+
+  const pxPerDay = this.monthWidth / 30;
+
+  const daysFromStart = clickX / pxPerDay;
+
+  const newDate = new Date(this.timelineStart);
+  newDate.setDate(this.timelineStart.getDate() + Math.floor(daysFromStart));
+
+  const endDate = new Date(newDate);
+  endDate.setDate(newDate.getDate() + 7); // default 1 week order
+
+  const newOrder = {
+    workCenter: workCenter,
+    name: 'New Work Order',
+    startDate: newDate,
+    endDate: endDate,
+    status: 'in-progress'
+  };
+
+  this.workOrders.push(newOrder);
+
+  this.openEditPanel(newOrder);
 }
 
 detectConflict(orderToCheck: any): boolean {
