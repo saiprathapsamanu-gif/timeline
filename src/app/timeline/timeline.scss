@@ -303,3 +303,11 @@
   border-radius: 6px;
   font-weight: 500;
 }
+
+.bar {
+  cursor: grab;
+}
+
+.bar:active {
+  cursor: grabbing;
+}

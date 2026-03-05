@@ -19,6 +19,12 @@ export class TimelineComponent implements OnInit {
   timelineStart = new Date('2024-08-01');
   monthWidth = 200;
 
+  isDragging = false;
+  dragOrder: any = null;
+  dragStartX = 0;
+  originalStartDate!: Date;
+  originalEndDate!: Date;
+
   ngOnInit(): void {
 
   const saved = localStorage.getItem('workOrders');
@@ -156,6 +162,89 @@ getMonthIndex(date: Date) {
   const monthDiff = date.getMonth() - startMonth;
 
   return yearDiff * 12 + monthDiff;
+}
+
+startDrag(event: MouseEvent, order: any) {
+
+  this.isDragging = true;
+  this.dragOrder = order;
+
+  this.dragStartX = event.clientX;
+
+  this.originalStartDate = new Date(order.startDate);
+  this.originalEndDate = new Date(order.endDate);
+
+}
+
+@HostListener('document:mousemove', ['$event'])
+onMouseMove(event: MouseEvent) {
+
+  if (!this.isDragging || !this.dragOrder) return;
+
+  const deltaX = event.clientX - this.dragStartX;
+
+  const pxPerDay = this.monthWidth / 30;
+
+  const dayShift = Math.round(deltaX / pxPerDay);
+
+  const newStart = new Date(this.originalStartDate);
+  const newEnd = new Date(this.originalEndDate);
+
+  newStart.setDate(newStart.getDate() + dayShift);
+  newEnd.setDate(newEnd.getDate() + dayShift);
+
+  this.dragOrder.startDate = newStart;
+  this.dragOrder.endDate = newEnd;
+
+}
+
+@HostListener('document:mouseup')
+onMouseUp() {
+
+  if (!this.isDragging) return;
+
+  this.isDragging = false;
+
+  if (this.detectConflict(this.dragOrder)) {
+
+    alert('Schedule conflict detected for this work center');
+
+    // revert back to original dates
+    this.dragOrder.startDate = this.originalStartDate;
+    this.dragOrder.endDate = this.originalEndDate;
+
+  } else {
+
+    localStorage.setItem(
+      'workOrders',
+      JSON.stringify(this.workOrders)
+    );
+
+  }
+
+  this.dragOrder = null;
+
+}
+
+deleteOrder(order: any) {
+
+  const confirmDelete = confirm(
+    `Delete "${order.name}"?`
+  );
+
+  if (!confirmDelete) return;
+
+  this.workOrders = this.workOrders.filter(
+    o => o !== order
+  );
+
+  localStorage.setItem(
+    'workOrders',
+    JSON.stringify(this.workOrders)
+  );
+
+  this.activeMenuId = null;
+
 }
 
 saveOrder() {

@@ -32,6 +32,7 @@
                     class="bar"
                     *ngFor="let order of workOrders"
                     (click)="$event.stopPropagation()"
+                    (mousedown)="startDrag($event, order)"
                     [ngStyle]="getBarStyle(order, wc)"
                     [ngClass]="order.status">
                     <span class="name">{{ order.name }}</span>
@@ -42,7 +43,7 @@
                             class="action-menu"
                             *ngIf="activeMenuId === order.name">
                             <div class="menu-item" (click)="openEditPanel(order); $event.stopPropagation()">Edit</div>
-                            <div class="menu-item delete">Delete</div>
+                            <div class="menu-item delete" (click)="deleteOrder(order); $event.stopPropagation()">Delete</div>
                         </div>
                     </div>
                 </div>
