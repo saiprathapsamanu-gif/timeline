@@ -49,23 +49,19 @@
   height: 60px;
 
   .month {
-    min-width: 200px;
-    border-left: 1px solid #f1f1f1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
-.timeline-body {
-  min-width: 1600px;  // 8 months × 200px
+  flex-shrink: 0;
+  border-left: 1px solid #f1f1f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ }
 }
 
 .timeline-body .row {
   height: 80px;
   border-top: 1px solid #f1f1f1;
   position: relative;
-  overflow: visible;   // VERY IMPORTANT
+  overflow: visible;  
 }
 
 .bar {
@@ -114,7 +110,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  position: relative;   // VERY IMPORTANT
+  position: relative;  
 }
 
 .more-btn {
@@ -133,7 +129,7 @@
 .action-menu {
   position: absolute;
   right: 0;
-  top: 30px;   // instead of 45px
+  top: 30px;  
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
@@ -184,7 +180,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4); // adjust if Sketch shows different
+  background: rgba(0, 0, 0, 0.4); 
   z-index: 200;
 }
 
@@ -214,7 +210,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;  // match vertical spacing
+  margin-bottom: 40px;  
 }
 
 .close-btn {
@@ -233,7 +229,7 @@
 .panel-body {
   display: flex;
   flex-direction: column;
-  gap: 24px;   // exact from design
+  gap: 24px;   
 }
 
 .side-panel {
@@ -258,9 +254,9 @@
 }
 
 .panel-body label {
-  font-size: 14px;  // confirm in Sketch
+  font-size: 14px;  
   font-weight: 500;
-  color: #687196;   // confirm exact color from Sketch
+  color: #687196;   
   margin: 0;
 }
 

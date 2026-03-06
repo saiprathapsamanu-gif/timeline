@@ -4,7 +4,7 @@
   <div class="controls">
     <label>Timescale</label>
     <ng-select
-      [items]="['Month']"
+      [items]="['Month','Week','Day']"
       [searchable]="false"
       [clearable]="false"
       [(ngModel)]="selectedZoom">
@@ -20,13 +20,13 @@
     </div>
 
     <div class="right-panel">
-      <div class="timeline-header">
-        <div class="month" *ngFor="let month of months">
+      <div class="timeline-header" [style.width.px]="getTimelineWidth()">
+        <div class="month" *ngFor="let month of months" [style.width.px]="getMonthWidth()">
             {{ month.label }}
         </div>
       </div>
 
-      <div class="timeline-body">
+      <div class="timeline-body" [style.width.px]="getTimelineWidth()">
             <div class="row" *ngFor="let wc of workCenters" (click)="onTimelineClick($event, wc)">
                 <div
                     class="bar"

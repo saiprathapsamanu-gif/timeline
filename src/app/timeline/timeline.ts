@@ -15,6 +15,7 @@ import { DatePipe } from '@angular/common';
 
 export class TimelineComponent implements OnInit {
   selectedZoom = 'Month';
+  orderCounter = 1;
 
   timelineStart = new Date('2024-08-01');
   monthWidth = 200;
@@ -24,6 +25,19 @@ export class TimelineComponent implements OnInit {
   dragStartX = 0;
   originalStartDate!: Date;
   originalEndDate!: Date;
+
+  pxPerDay = 24;
+  pxPerWeek = 120;
+  pxPerMonth = 200;
+
+  getPxPerDay(): number {
+
+  if (this.selectedZoom === 'Day') return this.pxPerDay;
+
+  if (this.selectedZoom === 'Week') return this.pxPerWeek / 7;
+
+  return this.pxPerMonth / 30;
+}
 
   ngOnInit(): void {
 
@@ -37,6 +51,8 @@ export class TimelineComponent implements OnInit {
       startDate: new Date(o.startDate),
       endDate: new Date(o.endDate)
     }));
+    // restore counter
+    this.orderCounter = this.workOrders.length + 1;
   }
 
 }
@@ -62,6 +78,7 @@ export class TimelineComponent implements OnInit {
 
   workOrders = [
 {
+  id: 1,
   workCenter: 'Extrusion Line A',
   name: 'Genesis Hardware',
   startDate: new Date('2024-09-10'),
@@ -69,6 +86,7 @@ export class TimelineComponent implements OnInit {
   status: 'complete'
 },
 {
+  id: 2,
   workCenter: 'CNC Machine 1',
   name: 'Test Conflict Order',
   startDate: new Date('2024-11-01'),
@@ -76,6 +94,7 @@ export class TimelineComponent implements OnInit {
   status: 'in-progress'
 },
 {
+  id: 3,
   workCenter: 'CNC Machine 1',
   name: 'Rodrigues Electrics',
   startDate: new Date('2024-08-25'),
@@ -83,6 +102,7 @@ export class TimelineComponent implements OnInit {
   status: 'in-progress'
 },
 {
+  id: 4,
   workCenter: 'Assembly Station',
   name: 'McMarrow Distribution',
   startDate: new Date('2024-11-05'),
@@ -123,6 +143,20 @@ closePanel() {
   this.selectedOrder = null;
 }
 
+getTimelineWidth(): number {
+
+  const pxPerDay = this.getPxPerDay();
+
+  const timelineEnd = new Date('2025-03-31');
+
+  const msPerDay = 1000 * 60 * 60 * 24;
+
+  const days =
+    (timelineEnd.getTime() - this.timelineStart.getTime()) / msPerDay;
+
+  return days * pxPerDay;
+}
+
 onStartDateChange(value: string) {
 
   const [year, month, day] = value.split('-').map(Number);
@@ -153,15 +187,13 @@ onEndDateChange(value: string) {
 
 }
 
-getMonthIndex(date: Date) {
+getMonthWidth(): number {
 
-  const startYear = this.timelineStart.getFullYear();
-  const startMonth = this.timelineStart.getMonth();
+  if (this.selectedZoom === 'Day') return 30 * this.pxPerDay;
 
-  const yearDiff = date.getFullYear() - startYear;
-  const monthDiff = date.getMonth() - startMonth;
+  if (this.selectedZoom === 'Week') return 30 * (this.pxPerWeek / 7);
 
-  return yearDiff * 12 + monthDiff;
+  return this.pxPerMonth;
 }
 
 startDrag(event: MouseEvent, order: any) {
@@ -183,7 +215,7 @@ onMouseMove(event: MouseEvent) {
 
   const deltaX = event.clientX - this.dragStartX;
 
-  const pxPerDay = this.monthWidth / 30;
+  const pxPerDay = this.getPxPerDay();
 
   const dayShift = Math.round(deltaX / pxPerDay);
 
@@ -270,7 +302,7 @@ onTimelineClick(event: MouseEvent, workCenter: string) {
 
   const clickX = event.clientX - timelineRect.left;
 
-  const pxPerDay = this.monthWidth / 30;
+  const pxPerDay = this.getPxPerDay();
 
   const daysFromStart = clickX / pxPerDay;
 
@@ -281,8 +313,9 @@ onTimelineClick(event: MouseEvent, workCenter: string) {
   endDate.setDate(newDate.getDate() + 7); // default 1 week order
 
   const newOrder = {
+    id: Date.now(),
     workCenter: workCenter,
-    name: 'New Work Order',
+    name: `New Work Order ${this.orderCounter++}`,
     startDate: newDate,
     endDate: endDate,
     status: 'in-progress'
@@ -329,10 +362,10 @@ getBarStyle(order: any, wc: string) {
   const durationDays =
     (end.getTime() - start.getTime()) / msPerDay;
 
-  const pxPerDay = this.monthWidth / 30; // approximate
+  const pxPerDay = this.getPxPerDay(); // approximate
 
   const left = daysFromStart * pxPerDay;
-  const width = durationDays * pxPerDay;
+  const width = (durationDays + 1) * pxPerDay;
 
   return {
     left: `${left}px`,
