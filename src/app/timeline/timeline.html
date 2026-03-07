@@ -3,25 +3,26 @@
 
   <div class="controls">
     <label>Timescale</label>
+
     <ng-select
-      [items]="['Month','Week','Day']"
-      [searchable]="false"
-      [clearable]="false"
-      [(ngModel)]="selectedZoom">
+        [items]="['Hour','Day','Week','Month']"
+        [searchable]="false"
+        [clearable]="false"
+        [(ngModel)]="selectedZoom">
     </ng-select>
   </div>
 
   <div class="timeline">
     <div class="left-panel">
       <div class="header">Work Center</div>
-      <div class="row" *ngFor="let wc of workCenters" (click)="onTimelineClick($event, wc)">
+      <div class="row" *ngFor="let wc of workCenters">
         {{ wc }}
       </div>
     </div>
 
     <div class="right-panel">
       <div class="timeline-header" [style.width.px]="getTimelineWidth()">
-        <div class="month" *ngFor="let month of months" [style.width.px]="getMonthWidth()">
+        <div class="month" *ngFor="let month of months; let i = index" [style.width.px]="getMonthWidth(i)">
             {{ month.label }}
         </div>
       </div>
@@ -30,7 +31,7 @@
             <div class="row" *ngFor="let wc of workCenters" (click)="onTimelineClick($event, wc)">
                 <div
                     class="bar"
-                    *ngFor="let order of workOrders"
+                    *ngFor="let order of getOrdersForWorkCenter(wc); trackBy: trackByOrder"
                     (click)="$event.stopPropagation()"
                     (mousedown)="startDrag($event, order)"
                     [ngStyle]="getBarStyle(order, wc)"
@@ -57,11 +58,22 @@
     <div class="side-panel" *ngIf="isPanelOpen">
   
         <div class="panel-inner">
-
+           <div class="panel-header-wrapper">
             <div class="panel-header">
-                <h2>Edit Work Order</h2>
-                <button class="close-btn" (click)="closePanel()">✕</button>
+                <div>
+                    <h2>Work Order Details</h2>
+                    <p class="subtitle">
+                    Specify the dates, name and status for this order
+                    </p>
+                </div>
+
+                <div class="header-actions">
+                    <button class="secondary-btn" (click)="closePanel()">Cancel</button>
+                    <button class="primary-btn" (click)="saveOrder()">Create</button>
+                </div>
             </div>
+
+                <div class="divider"></div>
 
             <div class="panel-body" *ngIf="selectedOrder">
 
@@ -98,9 +110,7 @@
                         (ngModelChange)="onEndDateChange($event)"/>
                 </div>
             </div>
-            <div class="panel-footer">
-                <button class="primary-btn" (click)="saveOrder()">Save</button>
-            </div>
+          </div>
         </div>
     </div>
 </div>

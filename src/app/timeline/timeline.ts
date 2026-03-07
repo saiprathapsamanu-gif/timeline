@@ -26,11 +26,13 @@ export class TimelineComponent implements OnInit {
   originalStartDate!: Date;
   originalEndDate!: Date;
 
-  pxPerDay = 24;
-  pxPerWeek = 120;
-  pxPerMonth = 200;
+  pxPerDay = 32;
+  pxPerWeek = 126;
+  pxPerMonth = 114;
 
   getPxPerDay(): number {
+
+  if (this.selectedZoom === 'Hour') return this.pxPerDay * 2;
 
   if (this.selectedZoom === 'Day') return this.pxPerDay;
 
@@ -58,12 +60,16 @@ export class TimelineComponent implements OnInit {
 }
 
   workCenters = [
-    'Extrusion Line A',
-    'CNC Machine 1',
-    'Assembly Station',
-    'Quality Control',
-    'Packaging Line'
-  ];
+  'Extrusion Line A',
+  'Extrusion Line B',
+  'CNC Machine 1',
+  'Assembly Station',
+  'Quality Control',
+  'Packaging Line',
+  'Laser Cutting',
+  'Paint Booth',
+  'Final Inspection'
+];
 
   months = [
     { label: 'Aug 2024', value: 0 },
@@ -73,42 +79,102 @@ export class TimelineComponent implements OnInit {
     { label: 'Dec 2024', value: 4 },
     { label: 'Jan 2025', value: 5 },
     { label: 'Feb 2025', value: 6 },
-    { label: 'Mar 2025', value: 7 }
+    { label: 'Mar 2025', value: 7 },
+    { label: 'Apr 2025', value: 8 }
   ];
 
-  workOrders = [
+workOrders = [
+
 {
-  id: 1,
-  workCenter: 'Extrusion Line A',
-  name: 'Genesis Hardware',
-  startDate: new Date('2024-09-10'),
-  endDate: new Date('2024-10-20'),
-  status: 'complete'
+id: 1,
+workCenter: 'Extrusion Line A',
+name: 'Genesis Hardware',
+startDate: new Date('2024-09-10'),
+endDate: new Date('2024-11-05'),
+status: 'complete'
 },
+
 {
-  id: 2,
-  workCenter: 'CNC Machine 1',
-  name: 'Test Conflict Order',
-  startDate: new Date('2024-11-01'),
-  endDate: new Date('2024-12-20'),
-  status: 'in-progress'
+id: 2,
+workCenter: 'Extrusion Line B',
+name: 'Spartan Manufacturing',
+startDate: new Date('2024-10-01'),
+endDate: new Date('2025-03-15'),
+status: 'in-progress'
 },
+
 {
-  id: 3,
-  workCenter: 'CNC Machine 1',
-  name: 'Rodrigues Electrics',
-  startDate: new Date('2024-08-25'),
-  endDate: new Date('2024-10-05'),
-  status: 'in-progress'
+id: 3,
+workCenter: 'CNC Machine 1',
+name: 'Rodrigues Electrics',
+startDate: new Date('2024-08-20'),
+endDate: new Date('2024-11-20'),
+status: 'open'
 },
+
 {
-  id: 4,
-  workCenter: 'Assembly Station',
-  name: 'McMarrow Distribution',
-  startDate: new Date('2024-11-05'),
-  endDate: new Date('2025-02-10'),
-  status: 'blocked'
+id: 4,
+workCenter: 'CNC Machine 1',
+name: 'Complex Systems',
+startDate: new Date('2024-12-13'),
+endDate: new Date('2025-02-10'),
+status: 'complete'
+},
+
+{
+id: 5,
+workCenter: 'Assembly Station',
+name: 'McMarrow Distribution',
+startDate: new Date('2024-09-01'),
+endDate: new Date('2025-01-15'),
+status: 'blocked'
+},
+
+{
+id: 6,
+workCenter: 'Quality Control',
+name: 'Quality Tests',
+startDate: new Date('2024-09-15'),
+endDate: new Date('2024-12-01'),
+status: 'open'
+},
+
+{
+id: 7,
+workCenter: 'Packaging Line',
+name: 'Orion Packaging',
+startDate: new Date('2025-01-05'),
+endDate: new Date('2025-03-20'),
+status: 'blocked'
+},
+
+{
+id: 8,
+workCenter: 'Final Inspection',
+name: 'Helios Manufacturing',
+startDate: new Date('2025-01-01'),
+endDate: new Date('2025-03-15'),
+status: 'open'
+},
+
+{
+id: 9,
+workCenter: 'Paint Booth',
+name: 'Nova Components',
+startDate: new Date('2025-01-05'),
+endDate: new Date('2025-03-20'),
+status: 'in-progress'
+},
+
+{
+id: 10,
+workCenter: 'Final Inspection',
+name: 'Helios Manufacturing',
+startDate: new Date('2025-01-01'),
+endDate: new Date('2025-03-15'),
+status: 'open'
 }
+
 ];
 
 activeMenuId: string | null = null;
@@ -126,7 +192,8 @@ handleClickOutside() {
 statusOptions = [
   { label: 'Complete', value: 'complete' },
   { label: 'In-Progress', value: 'in-progress' },
-  { label: 'Blocked', value: 'blocked' }
+  { label: 'Blocked', value: 'blocked' },
+  { label: 'Open', value: 'open' }
 ];
 
 isPanelOpen = false;
@@ -147,7 +214,7 @@ getTimelineWidth(): number {
 
   const pxPerDay = this.getPxPerDay();
 
-  const timelineEnd = new Date('2025-03-31');
+  const timelineEnd = new Date('2025-04-30');
 
   const msPerDay = 1000 * 60 * 60 * 24;
 
@@ -187,13 +254,23 @@ onEndDateChange(value: string) {
 
 }
 
-getMonthWidth(): number {
+getMonthWidth(index: number): number {
 
-  if (this.selectedZoom === 'Day') return 30 * this.pxPerDay;
+  const pxPerDay = this.getPxPerDay();
 
-  if (this.selectedZoom === 'Week') return 30 * (this.pxPerWeek / 7);
+  if (this.selectedZoom === 'Month') {
+    return this.pxPerMonth;
+  }
 
-  return this.pxPerMonth;
+  const date = new Date(this.timelineStart);
+  date.setMonth(date.getMonth() + index);
+
+  const year = date.getFullYear();
+  const month = date.getMonth();
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  return daysInMonth * pxPerDay;
 }
 
 startDrag(event: MouseEvent, order: any) {
@@ -217,7 +294,7 @@ onMouseMove(event: MouseEvent) {
 
   const pxPerDay = this.getPxPerDay();
 
-  const dayShift = Math.round(deltaX / pxPerDay);
+  const dayShift = deltaX / pxPerDay;
 
   const newStart = new Date(this.originalStartDate);
   const newEnd = new Date(this.originalEndDate);
@@ -325,6 +402,15 @@ onTimelineClick(event: MouseEvent, workCenter: string) {
 
   this.openEditPanel(newOrder);
 }
+
+getOrdersForWorkCenter(wc: string) {
+  return this.workOrders.filter(order => order.workCenter === wc);
+}
+
+trackByOrder(index: number, order: any) {
+  return order.id;
+}
+
 
 detectConflict(orderToCheck: any): boolean {
 
