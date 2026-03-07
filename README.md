@@ -3,7 +3,7 @@
 A manufacturing work order scheduling interface built using **Angular**.
 The application visualizes production schedules across multiple **work centers** using a **timeline (Gantt-style) planner**.
 
-Users can create, edit, and reschedule work orders while the system prevents scheduling conflicts.
+Users can create work orders by clicking on a timeline row, adjust schedules using drag-and-drop, and edit details in the side panel while the system prevents scheduling conflicts.
 
 
 # Features
@@ -17,6 +17,22 @@ Users can create, edit, and reschedule work orders while the system prevents sch
 * Timeline zoom levels (Hour / Day / Week / Month)
 * Local storage persistence
 
+# User Interaction
+
+The scheduler supports the following interactions:
+
+• **Create Work Order**  
+Click anywhere on a timeline row to create a new work order for that work center.
+
+• **Edit Work Order**  
+Drag a work order bar horizontally to reschedule it.
+
+• **Update Details**  
+Click the menu icon (⋯) on a work order to open the edit panel.
+
+• **Change Timeline Zoom**  
+Use the Timescale dropdown to switch between Hour, Day, Week, and Month views.
+
 
 # Technologies Used
 
@@ -25,6 +41,33 @@ Users can create, edit, and reschedule work orders while the system prevents sch
 * SCSS
 * ng-select (dropdown component)
 * Angular standalone components
+
+## Prerequisites
+
+Make sure the following are installed:
+
+* Node.js (version 18 or higher)
+* npm
+Check versions:
+```
+node -v
+npm -v
+```
+
+# Quick Start
+
+Clone the repository and start the application in a few steps.
+```
+git clone https://github.com/saiprathapsamanu-gif/timeline.git
+cd timeline
+npm install
+npx ng serve
+```
+
+Open your browser:
+```
+http://localhost:4200
+```
 
 # Installation
 
@@ -51,9 +94,10 @@ npm install @ng-bootstrap/ng-bootstrap
 # Running the Application
 
 Start the development server:
-```
+
 bash
-ng serve
+```
+npx ng serve
 ```
 
 Open the browser at:
@@ -93,7 +137,6 @@ The scheduler includes several manufacturing work centers:
 * Extrusion Line A
 * Extrusion Line B
 * CNC Machine 1
-* CNC Machine 2
 * Assembly Station
 * Quality Control
 * Packaging Line
@@ -131,7 +174,9 @@ Each zoom level adjusts the **pixels representing time units**, allowing users t
 The scheduler prevents overlapping work orders in the same work center.
 
 Conflict rule:
+```
 newStart < existingEnd && newEnd > existingStart
+```
 
 If a conflict occurs, the system alerts the user and reverts the scheduling change.
 
