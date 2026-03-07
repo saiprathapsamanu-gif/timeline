@@ -29,58 +29,62 @@ Users can create, edit, and reschedule work orders while the system prevents sch
 # Installation
 
 Clone the repository:
-
+```
 bash
-git clone <repository-url>
+git clone <https://github.com/saiprathapsamanu-gif/timeline.git>
 cd naologic-timeline
-
+```
 
 Install dependencies:
-
+```
 bash
 npm install
-
+```
 
 Install additional UI dependencies used in the project:
-
+```
 bash
 npm install @ng-select/ng-select
 npm install @ng-bootstrap/ng-bootstrap
-
+```
 
 # Running the Application
 
 Start the development server:
-
+```
 bash
 ng serve
-
+```
 
 Open the browser at:
-
+```
 http://localhost:4200
-
+```
 
 The application automatically reloads when source files are modified.
 
 # Project Structure
-
-text
-src/app/
- ├── timeline/
- │    ├── timeline.component.ts
+```
+src/
+ ├── app/
+ │    ├── timeline/
+ │    │    └── timeline.component.ts
+ │    │
+ │    ├── panel/
+ │    │    └── work-order-panel.component.ts
+ │    │
+ │    ├── services/
+ │    │    ├── work-order.service.ts
+ │    │    └── timeline.service.ts
+ │    │
+ │    └── models/
+ │         ├── work-order.model.ts
+ │         └── work-center.model.ts
  │
- ├── panel/
- │    ├── work-order-panel.component.ts
- │
- ├── services/
- │    ├── work-order.service.ts
- │    ├── timeline.service.ts
- │
- ├── models/
- │    ├── work-order.model.ts
- │    ├── work-center.model.ts
-
+ ├── styles.scss
+ ├── main.ts
+ └── index.html
+```
 
 # Example Work Centers
 
@@ -153,9 +157,9 @@ Large Language Models were used during development to assist with:
 * Implementing scheduling conflict detection
 
 Prompts used during development are documented in:
-
+```
 docs/llm_prompts.md
-
+```
 
 # Angular CLI
 
@@ -164,14 +168,19 @@ This project was generated using **Angular CLI v21.2.0**.
 Useful commands:
 
 Run development server:
+```
 ng serve
-
+```
 
 Build the project:
+```
 ng build
+```
 
 Run tests:
+```
 ng test
+```
 
 
 ![alt text](<docs/scheduler-preview.png>)
