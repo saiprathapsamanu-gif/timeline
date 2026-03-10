@@ -155,13 +155,6 @@
   box-shadow: 0 0 0 1px rgba(255, 245, 207, 1);
 }
 
-.status-pill {
-  background: rgba(0,0,0,0.08);
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  text-transform: capitalize;
-}
 
 .actions {
   display: flex;
@@ -325,6 +318,48 @@
 
 .side-panel {
   box-sizing: border-box;
+}
+.status-pill {
+  width: 51px;
+  height: 22px;
+  border-radius: 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.status-pill.open {
+  background: rgba(206,251,255,0.35);
+  color: #0aa2b5;
+  border: 1px solid rgba(206,251,255,0.35);
+}
+
+.status-pill.in-progress {
+  background: rgba(222,224,255,0.35);
+  color: #3b44d1;
+  border: 1px solid rgba(222,224,255,0.35);
+}
+
+.status-pill.blocked {
+  background: rgba(255,245,207,0.35);
+  color: #d97706;
+  border: 1px solid rgba(255,245,207,0.35);
+}
+
+.status-pill.complete {
+  background: rgba(209,250,179,0.35);
+  color: #2e7d32;
+  border: 1px solid rgba(209,250,179,0.35);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
 }
 
 .panel-body input,

@@ -13,6 +13,11 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./timeline.scss'],
 })
 
+// @upgrade
+// Improve timeline scaling logic to support dynamic zoom levels
+// with smoother transitions between Hour, Day, Week, and Month views.
+// Currently the scaling uses approximate pixel-per-day values.
+
 export class TimelineComponent implements OnInit {
   selectedZoom = 'Month';
   orderCounter = 1;
@@ -42,6 +47,10 @@ export class TimelineComponent implements OnInit {
 }
 
   ngOnInit(): void {
+  
+  // @upgrade
+  // Replace localStorage persistence with API-based storage
+  // to support multi-user scheduling and real-time updates.
 
   const saved = localStorage.getItem('workOrders');
 
@@ -91,7 +100,7 @@ workCenter: 'Extrusion Line A',
 name: 'Genesis Hardware',
 startDate: new Date('2024-09-10'),
 endDate: new Date('2024-11-05'),
-status: 'complete'
+status: 'Complete'
 },
 
 {
@@ -100,7 +109,7 @@ workCenter: 'Extrusion Line B',
 name: 'Spartan Manufacturing',
 startDate: new Date('2024-10-01'),
 endDate: new Date('2025-03-15'),
-status: 'in-progress'
+status: 'In progress'
 },
 
 {
@@ -109,7 +118,7 @@ workCenter: 'CNC Machine 1',
 name: 'Rodrigues Electrics',
 startDate: new Date('2024-08-20'),
 endDate: new Date('2024-11-20'),
-status: 'open'
+status: 'Open'
 },
 
 {
@@ -118,7 +127,7 @@ workCenter: 'CNC Machine 1',
 name: 'Complex Systems',
 startDate: new Date('2024-12-13'),
 endDate: new Date('2025-02-10'),
-status: 'complete'
+status: 'Complete'
 },
 
 {
@@ -127,7 +136,7 @@ workCenter: 'Assembly Station',
 name: 'McMarrow Distribution',
 startDate: new Date('2024-09-01'),
 endDate: new Date('2025-01-15'),
-status: 'blocked'
+status: 'Blocked'
 },
 
 {
@@ -136,7 +145,7 @@ workCenter: 'Quality Control',
 name: 'Quality Tests',
 startDate: new Date('2024-09-15'),
 endDate: new Date('2024-12-01'),
-status: 'open'
+status: 'Open'
 },
 
 {
@@ -145,7 +154,7 @@ workCenter: 'Packaging Line',
 name: 'Orion Packaging',
 startDate: new Date('2025-01-05'),
 endDate: new Date('2025-03-20'),
-status: 'blocked'
+status: 'Blocked'
 },
 
 {
@@ -154,7 +163,7 @@ workCenter: 'Final Inspection',
 name: 'Helios Manufacturing',
 startDate: new Date('2025-01-01'),
 endDate: new Date('2025-03-15'),
-status: 'open'
+status: 'Open'
 },
 
 {
@@ -163,7 +172,7 @@ workCenter: 'Paint Booth',
 name: 'Nova Components',
 startDate: new Date('2025-01-05'),
 endDate: new Date('2025-03-20'),
-status: 'in-progress'
+status: 'In progress'
 },
 
 {
@@ -172,7 +181,7 @@ workCenter: 'Final Inspection',
 name: 'Helios Manufacturing',
 startDate: new Date('2025-01-01'),
 endDate: new Date('2025-03-15'),
-status: 'open'
+status: 'Open'
 }
 
 ];
@@ -191,7 +200,7 @@ handleClickOutside() {
 
 statusOptions = [
   { label: 'Complete', value: 'complete' },
-  { label: 'In-Progress', value: 'in-progress' },
+  { label: 'In progress', value: 'in-progress' },
   { label: 'Blocked', value: 'blocked' },
   { label: 'Open', value: 'open' }
 ];
@@ -272,6 +281,11 @@ getMonthWidth(index: number): number {
 
   return daysInMonth * pxPerDay;
 }
+
+// @upgrade
+// Add resize handles on both ends of the work order bar
+// so users can adjust start and end dates directly
+// instead of editing through the side panel.
 
 startDrag(event: MouseEvent, order: any) {
 
@@ -411,6 +425,9 @@ trackByOrder(index: number, order: any) {
   return order.id;
 }
 
+// @upgrade
+// Instead of only showing an alert, visually highlight
+// conflicting work orders in the timeline for better UX.
 
 detectConflict(orderToCheck: any): boolean {
 
